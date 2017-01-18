@@ -1,0 +1,73 @@
+{
+  "info": {
+    "shield-name": "Ethernet Shield (LAN8720A)",
+    "shield-name-short": "Eth Shield",
+		"id": "eth_shield",
+    "compatible": ["Teensy 3.6","Teensy 3.5"],
+    "file-version": 1
+  },
+  "pins": [
+    {
+      "function-name": "RXD1",
+      "num": [3],
+      "num-default": 3,
+      "enabled": 1
+    },
+    {
+      "function-name": "RXD0",
+      "num": [4],
+      "num-default": 4,
+      "enabled": 1
+    },
+    {
+      "function-name": "REFCLK",
+      "num": [24],
+      "num-default": 24,
+      "enabled": 1
+    },
+    {
+      "function-name": "RXER",
+      "num": [25],
+      "num-default": 25,
+      "enabled": 1
+    },
+    {
+      "function-name": "RXDV",
+      "num": [26],
+      "num-default": 26,
+      "enabled": 1
+    },
+    {
+      "function-name": "TXEN",
+      "num": [27],
+      "num-default": 27,
+      "enabled": 1
+    },
+    {
+      "function-name": "TXD0",
+      "num": [28],
+      "num-default": 28,
+      "enabled": 1
+    },
+    {
+      "function-name": "TXD1",
+      "num": [39],
+      "num-default": 39,
+      "enabled": 1
+    },
+    {
+      "function-name": "MDIO",
+      "num": [16],
+      "num-default": 16,
+      "optonal": "false",
+      "enabled": 1
+    },
+    {
+      "function-name": "MDC",
+      "num": [17],
+      "num-default": 17,
+      "optonal": "false",
+      "enabled": 1
+    }
+  ]
+}

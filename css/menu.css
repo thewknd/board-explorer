@@ -1,0 +1,246 @@
+td.td_selector_menu h3 {
+
+}
+#selectorLevel0 {
+  display: block;
+  clear: left;
+}
+#selectorLevel1 {
+  display: block;
+  clear: left;
+}
+
+
+ul.hl_menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: #f1f1f1;
+}
+
+ul.hl_menu li {
+    float: left;
+    align: auto;
+    background-size: 25px 25px;
+    margin: 3px 10px;
+}
+
+ul.hl_menu li a {
+  display: block;
+  color: #000;
+  padding: 6px 10px;
+  text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+ul.hl_menu a:hover {
+    background-color: #555;
+    color: white;
+    cursor: pointer;
+}
+
+#top_nav {
+    background-color: #4CAF50;
+    width: 100%;
+    height: 29px;
+    color: white;
+    clear: left;
+}
+ul.shortcut_menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul.shortcut_menu li {
+    float: left;
+    align: auto;
+    background-size: 25px 25px;
+    border: 2px solid transparent;
+}
+
+ul.shortcut_menu li a {
+    display: block;
+    text-align: center;
+    padding: 4px 11px;
+    text-decoration: none;
+    align: auto;
+}
+
+/* Change the link color to #111 (black) on hover */
+ul.shortcut_menu li:hover {
+    background-color: rgb(130, 220, 134);
+    cursor: pointer;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+}
+
+#nav_toggleMenu {
+  background-image: url(./img/nav32.png);
+  background-repeat: no-repeat;
+}
+
+#nav_showNextLayer {
+  background-image: url(./img/next32.png);
+  background-repeat: no-repeat;
+}
+
+#nav_switchOneOrTwoLayer {
+  background-image: url(./img/two32.png);
+  background-repeat: no-repeat;
+}
+#nav_switchOneOrTwoLayer {
+  background-image: url(./img/two32.png);
+  background-repeat: no-repeat;
+}
+#nav_switchDigitalAnalogPins {
+  background-image: url(./img/alt32.png);
+  background-repeat: no-repeat;
+}
+#bottom_nav {
+    background-color: #4CAF50;
+    text-align: right;
+    height: 16px;
+    color: white;
+    font-size: 95%;
+    padding: 2px;
+}
+#bottom_nav a{
+    color: white;
+    text-decoration: none;
+}
+#bottom_nav a:hover{
+    text-decoration: underline;
+}
+ul.topmenu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: x;
+    background-color: #f1f1f1;
+}
+
+.topmenu li a {
+    display: block;
+    color: #000;
+    padding: 6px 10px;
+    text-decoration: none;
+}
+
+/* Change the link color on hover */
+.topmenu li a:hover {
+    background-color: #555;
+    color: white;
+    cursor: pointer;
+}
+
+.topmenu a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#mainmenu h3 {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: normal;
+    padding: 6px 10px;
+}
+#mainmenu {
+  background-color: #f1f1f1;
+}
+
+#mainmenu div{
+  overflow: auto;
+  height: 100%;
+}
+
+#configurator {
+  background-color: #f7f7f7;
+  width: 430px;
+  vertical-align: top;
+  height: 100%;
+  overflow: auto;
+}
+#configurator td{
+  padding: 2px 1px;
+}
+.cbxNormal {
+  border: 10px solid black;
+  background: red;
+}
+
+.gbPeripherals {
+  border: 2px solid #4caf50;
+  /* background-color: #d2d2d2; */
+  margin: 0 2px 2px 1px;
+}
+.gbPeripherals div {
+  padding: 3px;
+}
+
+.gbPeripherals h4 {
+  background-color: #4caf50;
+  color: #f7f7f7;
+  padding: 4px;
+  height: 16px;
+  font-size: 95%;
+  font-weight:  normal;
+}
+
+#gbInfo {
+  overflow:auto;!important;
+  height: 100%;
+}
+#gbSerial {
+  overflow:auto;!important;
+  height: 100%;
+}
+#gbPJRC {
+  overflow:auto;!important;
+  height: 100%;
+}
+#gbI2C {
+  overflow:auto;!important;
+  height: 100%;
+}
+#gbCAN {
+  overflow:auto;!important;
+  height: 100%;
+}
+#gbI2S {
+  overflow:auto; !important;
+  height: 100%;
+}
+#gbSPI {
+  overflow:auto; !important;
+  height: 100%;
+}
+#gbPinsDigital {
+  overflow:auto; !important;
+  height: 100%;
+}
+#gbPinsAnalog {
+  overflow:auto; !important;
+  height: 100%;
+}
+#gbPinsPWM {
+  overflow:auto; !important;
+  height: 100%;
+}
+.checkboxContainer {
+  border:2px solid #ccc;
+  width:110px;
+  height: 90px;
+  overflow-y: scroll;
+}
+input{
+  padding: 1px 2px;
+  margin: 1px;
+  border: 1px solid black
+}
+input[type="checkbox"] {
+  margin: 2px 5px 2px 0;
+}
+option.clDefaultPin:after {
+  content: ' (default)';
+}

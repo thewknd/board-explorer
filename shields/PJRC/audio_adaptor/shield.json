@@ -1,0 +1,109 @@
+{
+  "info": {
+    "shield-name": "Audio Adaptor",
+    "shield-name-short": "Audio Adaptor",
+    "id": "audio_adaptor",
+    "compatible": ["Teensy 3.6","Teensy 3.5","Teensy 3.2","Teensy 3.1"],
+    "file-version": 1
+  },
+  "pins": [
+    {
+      "function-name": "I2S0RX",
+      "txt-name": "I2S RX",
+      "num": [13],
+      "num-default": 13,
+      "enabled": 1
+    },
+    {
+      "function-name": "I2S0TX",
+      "txt-name": "I2S TX",
+      "num": [22],
+      "num-default": 22,
+      "enabled": 1
+    },
+    {
+      "function-name": "MCLK",
+      "num": [11],
+      "num-default": 11,
+      "enabled": 1
+    },
+    {
+      "function-name": "BCLK",
+      "num": [9],
+      "num-default": 9,
+      "enabled": 1
+    },
+    {
+      "function-name": "LRCLK",
+      "num": [23],
+      "num-default": 23,
+      "enabled": 1
+    },
+    {
+      "function-name": "I2C0SDA",
+      "txt-name": "I2C SDA",
+      "num": [18],
+      "num-default": 18,
+      "enabled": 1
+    },
+    {
+      "function-name": "I2C0SCL",
+      "txt-name": "I2C SCL",
+      "num": [19],
+      "num-default": 19,
+      "enabled": 1
+    },
+    {
+      "function-name": "VOLUMEPOTENTIOMETER",
+      "txt-name": "Vol. potentiometer",
+      "short-name": "Vol. pot.",
+      "num": [15],
+      "num-default": 15,
+      "optonal": "true",
+      "enabled": 1
+    },
+    {
+      "function-name": "SPIMOSI",
+      "txt-name": "SPI MOSI",
+      "num": [7],
+      "num-default": 7,
+      "optonal": "true",
+      "enabled": 1
+    },
+    {
+      "function-name": "SPIMISO",
+      "txt-name": "SPI MISO",
+      "num": [12],
+      "num-default": 12,
+      "optonal": "true",
+      "enabled": 1
+    },
+    {
+      "function-name": "SPISCLK",
+      "txt-name": "SPI SCLK",
+      "num": [14],
+      "num-default": 14,
+      "optonal": "true",
+      "enabled": 1
+    },
+    {
+      "function-name": "MEMORYCS",
+      "short-name": "MEMORY CS",
+      "txt-name": "MEMORY CHIP CS",
+      "num": [6],
+      "num-default": 6,
+      "optonal": "true",
+      "enabled": 1
+    },
+    {
+      "function-name": "SDCS",
+      "short-name": "SD CS",
+      "txt-name": "SD CARD CS",
+      "num": [10],
+      "num-default": 10,
+      "optonal": "true",
+      "enabled": 1
+    }
+
+  ]
+}

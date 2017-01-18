@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- jquery 2.2.4 -->
+    <script src="./lib/jquery.min.js"></script>
+    <!-- d3 4.4.1 -->
+    <script src="./lib/d3.min.js"></script>
+    <script src="./js/util.js"></script>
+    <script src="./js/menu.js"></script>
+    <script src="./js/info.js"></script>
+    <script src="./js/serial.js"></script>
+    <script src="./js/can.js"></script>
+    <script src="./js/i2s.js"></script>
+    <script src="./js/i2c.js"></script>
+    <script src="./js/shield.js"></script>
+    <script src="./js/functionSelector.js"></script>
+    <script src="./js/spi.js"></script>
+    <script src="./js/pins_digital.js"></script>
+    <script src="./js/pins_analog.js"></script>
+    <script src="./js/pins_pwm.js"></script>
+    <script src="./js/codeview.js"></script>
+
+    <script src="./boards/teensy_36/board.js"></script>
+
+    <link href="./css/main.css" rel="stylesheet">
+    <link href="./css/menu.css" rel="stylesheet">
+
+  </head>
+  <body style="height: 100%;">
+    <table id="maintable" style="height: calc(100% - 20px); height: -moz-calc(100% - 20px);  -webkit-calc(100% - 20px);">
+      <tr>
+        <td id="mainmenu" style="vertical-align:top;">
+        </td>
+        <td  style="vertical-align:top;" id="configurator">
+        </td>
+        <td style="vertical-align:top">
+          <table style="width:100%">
+            <tr>
+              <td style="width:100%" colspan="2">
+                <div id="top_nav">
+                  <ul class="shortcut_menu">
+                    <li id="nav_toggleMenu"><a onclick="toggleConfiguratorMenu()">&nbsp;</a></li>
+                    <li id="nav_showNextLayer"><a onclick="showNextLayer()">&nbsp;</a></li>
+                    <li id="nav_switchOneOrTwoLayer"><a onclick="switchOneOrTwoLayer()">&nbsp;</a></li>
+                    <li id="nav_switchDigitalAnalogPins"><a onclick="switchDigitalAnalogPins()">&nbsp;</a></li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <table>
+            <tr>
+              <td id="boardView0">
+
+                <svg id="board_layer0"></svg>
+              </td>
+              <td id="boardView1">
+                <svg id="board_layer1"></svg>
+              </td>
+            </tr>
+            <!--<tr>
+              <td class ="td_selector_menu" colspan="2">
+
+                <div id="selectorLevel0">
+
+                </div>
+                <div id="selectorLevel1">
+
+                </div>
+                <div id="selectorLevel2">
+
+                </div>
+              </td>
+            </tr>-->
+          </table>
+        </td>
+      </tr>
+    </table>
+    <div id="bottom_nav">
+      <a href="https://github.com/thewknd/teensy-misc">github</a> -
+      2017 -
+      <a href="https://icons8.com/web-app/33882/Navigation-Pane">Navigation pane icon credits</a>
+    </div>
+
+  </body>
+  <script>
+var board;
+var shield;
+var shield_mfg_list = [];
+var shieldCount = 0;
+var svg;
+var hl_pins = [];
+var hl_select = -1;
+var hl_pin_num_bg = [];
+var shields_loaded = 0;
+var show_digital_pins = 2;
+
+function switchDigitalAnalogPins() {
+  if(show_digital_pins == 1) {
+    show_digital_pins = 2;
+    for(var p = 0; p < board.pins.length; p++) {
+      if((board.pins[p].is_digital > 0) && (board.pins[p].is_analog > 0)) {
+        d3.select("#pinNum" + board.pins[p].pin_arduino_digital).text(board.pins[p].pin_arduino_digital);
+      }
+    }
+  } else if(show_digital_pins == 2){
+    show_digital_pins = 3;
+    for(var p = 0; p < board.pins.length; p++) {
+      if((board.pins[p].is_digital > 0) && (board.pins[p].is_analog > 0)) {
+        d3.select("#pinNum" + board.pins[p].pin_arduino_digital).text(board.pins[p].pin_arduino_analog);
+      }
+    }
+  } else {
+    show_digital_pins = 1;
+    for(var p = 0; p < board.pins.length; p++) {
+      if((board.pins[p].is_digital > 0) && (board.pins[p].is_analog > 0)) {
+        d3.select("#pinNum" + board.pins[p].pin_arduino_digital).text(board.pins[p].pin_arduino_digital + "/" + board.pins[p].pin_arduino_analog);
+      }
+    }
+  }
+}
+
+function showNextLayer() {
+  if(document.getElementById("boardView0").style.display == "table-cell") {
+    document.getElementById("boardView1").style.display = "table-cell";
+    document.getElementById("boardView0").style.display = "none";
+  } else {
+    document.getElementById("boardView1").style.display = "none";
+    document.getElementById("boardView0").style.display = "table-cell";
+  }
+}
+function switchOneOrTwoLayer() {
+
+  if((document.getElementById("boardView0").style.display == "table-cell") && (document.getElementById("boardView1").style.display == "table-cell")) {
+    document.getElementById("boardView1").style.display = "none";
+    document.getElementById("boardView0").style.display = "table-cell";
+  } else {
+    document.getElementById("boardView1").style.display = "table-cell";
+    document.getElementById("boardView0").style.display = "table-cell";
+  }
+}
+
+function toggleConfiguratorMenu() {
+
+  var conf = document.getElementById("configurator");
+
+  if(conf.style.display == "table-cell") {
+    conf.style.display = "none";
+  } else {
+    conf.style.display = "table-cell";
+  }
+}
+
+function highlightCompatiblePin(pin_nr) {
+  d3.select("#pinNumBg" + pin_nr).attr("fill", "#B3D9FF");
+}
+function shutOffCompatiblePin(pin_nr) {
+  d3.select("#pinNumBg" +pin_nr).attr("fill", "white");
+}
+
+function highlightPin(pin_nr) {
+    d3.select("#pinNumBg" + pin_nr).attr("stroke", "#FF6666");
+    d3.select("#pinNumBg" + pin_nr).attr("stroke-width", "2");
+    d3.select("#pinTxtBg" + pin_nr).attr("stroke", "#FF6666");
+    d3.select("#pinTxtBg" + pin_nr).attr("stroke-width", "2");
+    //d3.select("#pin" + pin_nr).attr("stroke", "red");
+    d3.select("#pin" + pin_nr).attr("fill", "#FF6666");
+}
+
+function shutOffPin(pin_nr) {
+    d3.select("#pinNumBg" +pin_nr).attr("stroke", "black");
+    d3.select("#pinNumBg" + pin_nr).attr("stroke-width", "1");
+    d3.select("#pinTxtBg" +pin_nr).attr("stroke", "black");
+    d3.select("#pinTxtBg" +pin_nr).attr("stroke-width", "1");
+    //d3.select("#pin" +pin_nr).attr("stroke", "black");
+    d3.select("#pin" +pin_nr).attr("fill", "white");
+}
+
+
+function checkAll() {
+  for(var i = 0; i < board.pins.length; i++) {
+    d3.select("#pinTxt" + board.pins[i].pin_id).text("disabled");
+    d3.select("#pinTxtBg" + board.pins[i].pin_id).attr("fill", "#FFF");
+    shutOffPin(board.pins[i].pin_id);
+    shutOffCompatiblePin(board.pins[i].pin_id);
+  }
+
+  if(hl_select != -1) {
+    highlightPin(hl_select);
+  }
+
+  for(var p = 0; p < hl_pin_num_bg.length; p++) {
+    highlightCompatiblePin(hl_pin_num_bg[p]);
+  }
+
+  for(var p = 0; p < board.pins.length; p++) {
+    if(board.pins[p].is_digital > 0) {
+      if(document.getElementById("cbxEnableDigitalPin" + board.pins[p].pin_id).checked) {
+        if(document.getElementById("iDigitalPin" + board.pins[p].pin_id).value !== "") {
+          checkPin(board.pins[p].pin_id, document.getElementById("iDigitalPin" + board.pins[p].pin_id).value);
+        } else {
+          checkPin(board.pins[p].pin_id, document.getElementById("cbDigitalPin" + board.pins[p].pin_id).value);
+        }
+      }
+    }
+    if(board.pins[p].is_analog > 0) {
+      //console.log("** (1) check analog pins " + board.pins[p].pin_id);
+      if(document.getElementById("cbxEnableANALOGADC" + board.pins[p].pin_id).checked) {
+          //console.log("** (2) check analog pins " + board.pins[p].pin_id);
+        if(document.getElementById("iANALOGADC" + board.pins[p].pin_id).value !== "") {
+          checkPin(board.pins[p].pin_id, document.getElementById("iANALOGADC" + board.pins[p].pin_id).value);
+        } else {
+          checkPin(board.pins[p].pin_id, "Analog input");
+        }
+      }
+    }
+  }
+  for(var p = 0; p < board.functions.pwm.pins.length; p++) {
+    if(document.getElementById("cbxEnablePWM" + board.functions.pwm.pins[p]).checked) {
+      if(document.getElementById("iPWM" + board.functions.pwm.pins[p]).value !== "") {
+        checkPin(board.functions.pwm.pins[p], document.getElementById("iPWM" + board.functions.pwm.pins[p]).value);
+      } else {
+        checkPin(board.functions.pwm.pins[p], "PWM output");
+      }
+    }
+  }
+  for(var p = 0; p < board.functions.analog.dac.pins.length; p++) {
+    if(document.getElementById("cbxEnableANALOGDAC" + board.functions.analog.dac.pins[p].pin_id).checked) {
+      if(document.getElementById("iANALOGDAC" + board.functions.analog.dac.pins[p].pin_id).value !== "") {
+        checkPin(board.functions.analog.dac.pins[p].pin_id, document.getElementById("iANALOGDAC" + board.functions.analog.dac.pins[p].pin_id).value);
+      } else {
+        checkPin(board.functions.analog.dac.pins[p].pin_id, "Analog output");
+      }
+    }
+  }
+  for(var p = 0; p < board.functions.Serial.length; p++) {
+    if(document.getElementById("cbxEnableSerial" + p).checked) {
+      checkPin(document.getElementById("cbRXSerial" + p).value, board.functions.Serial[p]["function-name"] + " RX");
+      checkPin(document.getElementById("cbTXSerial" + p).value, board.functions.Serial[p]["function-name"] + " TX");
+      if(document.getElementById("cbxEnableRTSSerial" + p)) {
+        if(document.getElementById("cbxEnableRTSSerial" + p).checked) {
+          checkPin(document.getElementById("cbRTSSerial" + p).value, board.functions.Serial[p]["function-name"] + " RTS");
+        }
+      }
+      if(document.getElementById("cbxEnableCTSSerial" + p)) {
+        if(document.getElementById("cbxEnableCTSSerial" + p).checked) {
+          checkPin(document.getElementById("cbCTSSerial" + p).value, board.functions.Serial[p]["function-name"] + " CTS");
+        }
+      }
+      if(document.getElementById("cbxEnableTRANSMITTER_ENABLESerial" + p)) {
+        if(document.getElementById("cbxEnableTRANSMITTER_ENABLESerial" + p).checked) {
+          checkPin(document.getElementById("cbTRANSMITTER_ENABLESerial" + p).value, board.functions.Serial[p]["function-name"] + " TransmitterEnable");
+        }
+      }
+    }
+  }
+
+  for(var p = 0; p < board.functions.SPI.length; p++) {
+    if(document.getElementById("cbxEnableSPI" + p).checked) {
+      checkPin(document.getElementById("cbMASTER-MOSISPI" + p).value, board.functions.SPI[p]["function-name"] + " MOSI");
+      checkPin(document.getElementById("cbMASTER-MISOSPI" + p).value, board.functions.SPI[p]["function-name"] + " MISO");
+      checkPin(document.getElementById("cbSCLKSPI" + p).value, board.functions.SPI[p]["function-name"] + " SCLK");
+
+      for(var o = 0; o < board.functions.SPI[p].cs_hw.length; o++) {
+        //console.log("cbxEnableCS_HWSPI" + p + board.functions.SPI[p].cs_hw[o]);
+        if(document.getElementById("cbxEnableCS_HWSPI" + p + board.functions.SPI[p].cs_hw[o]).checked) {
+          checkPin(board.functions.SPI[p].cs_hw[o], board.functions.SPI[p]["function-name"] + " CS HW");
+        }
+      }
+
+      for(var o = 0; o < board.functions.SPI[p].cs_sw.length; o++) {
+        if(document.getElementById("cbxEnableCS_SWSPI" + p + board.functions.SPI[p].cs_sw[o]).checked) {
+          checkPin(board.functions.SPI[p].cs_sw[o], board.functions.SPI[p]["function-name"] + " CS SW");
+        }
+      }
+    }
+  }
+
+  for(var p = 0; p < board.functions.CAN.length; p++) {
+    if(document.getElementById("cbxEnableCAN" + p).checked) {
+      checkPin(document.getElementById("cbRXCAN" + p).value, board.functions.CAN[p]["function-name"] + " RX");
+      checkPin(document.getElementById("cbTXCAN" + p).value, board.functions.CAN[p]["function-name"] + " TX");
+    }
+  }
+  for(var p = 0; p < board.functions.I2C.length; p++) {
+    if(document.getElementById("cbxEnableI2C" + p).checked) {
+      checkPin(document.getElementById("cbSDAI2C" + p).value, board.functions.I2C[p]["function-name"] + " SDA");
+      checkPin(document.getElementById("cbSCLI2C" + p).value, board.functions.I2C[p]["function-name"] + " SCL");
+    }
+  }
+  for(var p = 0; p < board.functions.I2S.length; p++) {
+    if(document.getElementById("cbxEnableI2S" + p).checked) {
+      if(document.getElementById("cbxEnableRXD0I2S" + p)) {
+        if(document.getElementById("cbxEnableRXD0I2S" + p).checked) {
+          checkPin(document.getElementById("cbRXD0I2S" + p).value, board.functions.I2S[p]["function-name"] + " RXD0");
+        }
+      }
+      if(document.getElementById("cbxEnableRXD1I2S" + p)) {
+        if(document.getElementById("cbxEnableRXD1I2S" + p).checked) {
+          checkPin(document.getElementById("cbRXD1I2S" + p).value, board.functions.I2S[p]["function-name"] + " RXD1");
+        }
+      }
+      if(document.getElementById("cbxEnableTXD0I2S" + p)) {
+        if(document.getElementById("cbxEnableTXD0I2S" + p).checked) {
+          checkPin(document.getElementById("cbTXD0I2S" + p).value, board.functions.I2S[p]["function-name"] + " TXD0");
+        }
+      }
+      if(document.getElementById("cbxEnableTXD1I2S" + p)) {
+        if(document.getElementById("cbxEnableTXD1I2S" + p).checked) {
+          checkPin(document.getElementById("cbTXD1I2S" + p).value, board.functions.I2S[p]["function-name"] + " TXD1");
+        }
+      }
+      if(document.getElementById("cbxEnableRX_BCLKI2S" + p)) {
+        if(document.getElementById("cbxEnableRX_BCLKI2S" + p).checked) {
+          checkPin(document.getElementById("cbRX_BCLKI2S" + p).value, board.functions.I2S[p]["function-name"] + " RX_BCLK");
+        }
+      }
+      if(document.getElementById("cbxEnableTX_BCLKI2S" + p)) {
+        if(document.getElementById("cbxEnableTX_BCLKI2S" + p).checked) {
+          checkPin(document.getElementById("cbTX_BCLKI2S" + p).value, board.functions.I2S[p]["function-name"] + " TX_BCLK");
+        }
+      }
+      if(document.getElementById("cbxEnableRX_FSI2S" + p)) {
+        if(document.getElementById("cbxEnableRX_FSI2S" + p).checked) {
+          checkPin(document.getElementById("cbRX_FSI2S" + p).value, board.functions.I2S[p]["function-name"] + " RX_FS");
+        }
+      }
+      if(document.getElementById("cbxEnableTX_FSI2S" + p)) {
+        if(document.getElementById("cbxEnableTX_FSI2S" + p).checked) {
+          checkPin(document.getElementById("cbTX_FSI2S" + p).value, board.functions.I2S[p]["function-name"] + " TX_FS");
+        }
+      }
+      if(document.getElementById("cbxEnableMCLKI2S" + p)) {
+        if(document.getElementById("cbxEnableMCLKI2S" + p).checked) {
+          checkPin(document.getElementById("cbMCLKI2S" + p).value, board.functions.I2S[p]["function-name"] + " MCLK");
+        }
+      }
+    }
+  }
+
+  for(var h = 0; h < Object.keys(shield).length; h++) {
+    //console.log("** check shield mfg: " + Object.keys(shield)[h]);
+    for(var l = 0; l < shield[Object.keys(shield)[h]].length;l++) {
+      //console.log("** check shield mfg: " + Object.keys(shield)[h].toUpperCase() + "." + shield[Object.keys(shield)[h]][l].info.id.toUpperCase());
+      checkShield(Object.keys(shield)[h],shield[Object.keys(shield)[h]][l]);
+    }
+  }
+}
+
+function checkShield(shield_vendor,shield_object) {
+  if(document.getElementById('cbxEnableShield' + shield_vendor.toUpperCase() + shield_object.info.id.toUpperCase()).checked) {
+    //console.log("** check shield: " + shield_vendor.toUpperCase() + "." + shield_object.info.id.toUpperCase() + " checked");
+    for(var p = 0; p < shield_object.pins.length; p++) {
+      //console.log("** check shield: " + shield_vendor.toUpperCase() + "." + shield_object.info.id.toUpperCase() + " FUNC: " + shield_object.pins[p]["function-name"]);
+      if(shield_object.pins[p]["short-name"] != null) {
+        checkPin(document.getElementById("cbShield" + shield_vendor.toUpperCase() + shield_object.info.id.toUpperCase() + shield_object.pins[p]["function-name"]).value.toUpperCase(), shield_object.info["shield-name-short"] + " " + shield_object.pins[p]["short-name"]);
+      } else {
+        if(shield_object.pins[p]["txt-name"] != null) {
+            checkPin(document.getElementById("cbShield" + shield_vendor.toUpperCase() + shield_object.info.id.toUpperCase() + shield_object.pins[p]["function-name"]).value.toUpperCase(), shield_object.info["shield-name-short"] + " " + shield_object.pins[p]["txt-name"]);
+        } else {
+          checkPin(document.getElementById("cbShield" + shield_vendor.toUpperCase() + shield_object.info.id.toUpperCase() + shield_object.pins[p]["function-name"]).value.toUpperCase(), shield_object.info["shield-name-short"] + " " + shield_object.pins[p]["function-name"]);
+        }
+      }
+
+    }
+  }
+}
+
+function checkPin(pin,txt) {
+  if(d3.select("#pinTxt" + pin).text() == "disabled") {
+    d3.select("#pinTxt" + pin).text(txt);
+    d3.select("#pinTxtBg" + pin).attr("fill", "#A9E28D");
+  } else {
+    d3.select("#pinTxt" + pin).text("E: Pin bereits verwendet");
+    d3.select("#pinTxtBg" + pin).attr("fill", "#ffc107");
+  }
+}
+
+$(document).ready(function () {
+  console.log("doc ready");
+  $.getJSON("boards/teensy_36/board.json", function (data) {
+    board = data;
+    loadmenu();
+    loadAllShields();
+  }).error(function() {
+    console.log("error loading board (Teensy_36) file");
+  }).success(function() {
+    console.log("board (Teensy_36) loaded");
+  });
+});
+  </script>
+</html>

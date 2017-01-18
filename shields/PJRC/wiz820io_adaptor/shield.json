@@ -1,0 +1,52 @@
+{
+  "info": {
+    "shield-name": "WIZ820io & Micro SD Card Adaptor",
+    "shield-name-short": "WIZ820 Adaptor",
+		"id": "wiz820io_adaptor",
+    "compatible": ["Teensy 3.6","Teensy 3.5"],
+    "file-version": 1
+  },
+  "pins": [
+    {
+      "function-name": "SDCARDCS",
+			"txt-name": "SD Card CS",
+			"short-name": "SD CS",
+      "num": [4],
+      "num-default": 4,
+      "enabled": 1
+    },
+    {
+      "function-name": "WIZ820CS",
+			"txt-name": "WIZ820 CS",
+      "num": [10],
+      "num-default": 10,
+      "enabled": 1
+    },
+    {
+      "function-name": "MOSI",
+      "num": [11],
+      "num-default": 11,
+      "enabled": 1
+    },
+    {
+      "function-name": "MISO",
+      "num": [12],
+      "num-default": 12,
+      "enabled": 1
+    },
+    {
+      "function-name": "SCLK",
+      "num": [13],
+      "num-default": 13,
+      "enabled": 1
+    },
+    {
+      "function-name": "WIZ820RESET",
+			"txt-name": "WIZ820 Reset",
+			"short-name": "Reset",
+      "num": [9],
+      "num-default": 9,
+      "enabled": 1
+    }
+  ]
+}
