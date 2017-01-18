@@ -343,6 +343,8 @@ function hideAllConfigurations() {
       }
     }
     document.getElementById("configurator").style.display = "table-cell";
+    document.getElementById("configurator").style.height = (window.innerHeight - 20) + "px";
+    document.getElementById("maintable").style.height = (window.innerHeight - 20) + "px";
 }
 
 /*

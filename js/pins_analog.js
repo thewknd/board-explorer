@@ -82,7 +82,7 @@ function initPinsAnalog() {
   groupBox1.appendChild(groupBox);
 
   var head4 = document.createElement("h4");
-  head4.appendChild(document.createTextNode("Output (Digital to analog)"));
+  head4.appendChild(document.createTextNode("Analog output (Digital to analog)"));
   groupBox.appendChild(head4);
 
   var divHell1 = document.createElement("div");
@@ -109,7 +109,7 @@ function initPinsAnalog() {
   }
 
   var head4 = document.createElement("h4");
-  head4.appendChild(document.createTextNode("Input (Ananlog to digital)"));
+  head4.appendChild(document.createTextNode("Analog input (Analog to digital)"));
   groupBox.appendChild(head4);
 
   var divHell1 = document.createElement("div");
