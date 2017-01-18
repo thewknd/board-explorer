@@ -42,7 +42,7 @@ function initSPI() {
       addFunctionPin(table0,"SPI",i,"MISO","master-miso");
       addFunctionPin(table0,"SPI",i,"SCLK","sclk");
       addCheckedListboxFunctionPin(table0,"SPI",i,"CS software", "cs_sw");
-      addCheckedListboxFunctionPin(table0,"SPI",i,"CS hardware", "cs_hw");
+      addCheckedListboxFunctionPin(table0,"SPI",i,"CS native", "cs_hw");
     }
   } else {
     console.log("no SPI ports defined");

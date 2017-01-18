@@ -21,6 +21,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
+function loadBoard(board_name) {
+  $.getJSON("boards/" + board_name + "/board.json", function (data) {
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-Load board";
+    board = data;
+    loadmenu();
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-Load menu";
+    loadAllShields();
+  }).error(function() {
+    console.log("error loading board file");
+  }).success(function() {
+    console.log("board loaded");
+  });
+}
 function addCheckedListboxFunctionPin(parent, f_type, f_num, pin_type, tag_pin_type, highlight_pin=-1) {
   if ((board.functions[f_type][f_num][tag_pin_type.toLowerCase()][0] !== -1))  {
     var row = document.createElement("tr");

@@ -81,7 +81,12 @@
       2017 -
       <a href="https://icons8.com/web-app/33882/Navigation-Pane" target="_blank">Navigation pane icon credits</a>
     </div>
-
+    <div id="loadscreen">
+      <div id="boards">
+      </div>
+      <div id="divlog">
+      </div>
+    </div>
   </body>
   <script>
 var board;
@@ -94,6 +99,7 @@ var hl_select = -1;
 var hl_pin_num_bg = [];
 var shields_loaded = 0;
 var show_digital_pins = 2;
+var boardlist;
 
 function switchDigitalAnalogPins() {
   if(show_digital_pins == 1) {
@@ -264,7 +270,7 @@ function checkAll() {
       for(var o = 0; o < board.functions.SPI[p].cs_hw.length; o++) {
         //console.log("cbxEnableCS_HWSPI" + p + board.functions.SPI[p].cs_hw[o]);
         if(document.getElementById("cbxEnableCS_HWSPI" + p + board.functions.SPI[p].cs_hw[o]).checked) {
-          checkPin(board.functions.SPI[p].cs_hw[o], board.functions.SPI[p]["function-name"] + " CS HW");
+          checkPin(board.functions.SPI[p].cs_hw[o], board.functions.SPI[p]["function-name"] + " CS native");
         }
       }
 
@@ -378,14 +384,31 @@ function checkPin(pin,txt) {
 
 $(document).ready(function () {
   console.log("doc ready");
-  $.getJSON("boards/teensy_36/board.json", function (data) {
-    board = data;
-    loadmenu();
-    loadAllShields();
+
+  $.getJSON("boards/boards.json", function (data) {
+    boardlist = data;
+
+
+    var topmenu;
+    var menutitle;
+    for(var g = 0; g < boardlist.length; g++) {
+      menutitle = document.createElement("h3");
+      txtnode = document.createTextNode(boardlist[g].name);
+      menutitle.appendChild(txtnode);
+      document.getElementById("boards").appendChild(menutitle);
+      topmenu = document.createElement("ul");
+      topmenu.className = "topmenu";
+      document.getElementById("boards").appendChild(topmenu);
+      for(var f = 0; f < boardlist[g].boards.length;f++) {
+        addMenuItem(topmenu,"loadBoard('" + boardlist[g].boards[f].folder + "')",boardlist[g].boards[f].name);
+      }
+    }
+
+
   }).error(function() {
-    console.log("error loading board (Teensy_36) file");
+    console.log("error loading boards/board.json file");
   }).success(function() {
-    console.log("board (Teensy_36) loaded");
+    console.log("board boards/boards.json loaded");
   });
 });
   </script>

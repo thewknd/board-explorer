@@ -21,3 +21,26 @@ body {
 
   vertical-align: top;
 }
+div#loadscreen {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+}
+div#loadscreen a{
+  cursor: pointer;
+}
+#divlog {
+  width: 500px;
+  margin: auto;
+  overflow: auto
+}
+#boards {
+  width: 500px;
+  margin: auto;
+  border: 1px solid #a3a3a3;
+  padding: 3px;
+  overflow: auto
+}

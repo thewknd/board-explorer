@@ -1,4 +1,11 @@
-{
-  "Teensy 3.5": "teensy_35",
-  "Teensy 3.6": "teensy_36"
-}
+[
+  {
+		"name": "PJRC",
+		"boards": [
+			{
+				"name": "Teensy 3.6",
+				"folder": "teensy_36"
+			}
+		]
+	}
+]

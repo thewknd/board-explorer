@@ -25,52 +25,64 @@ function loadAllShields() {
   $.getJSON("./shields/shields.json", function (data) {
     shield = data;
 
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-Shield";
     for(var t = 0; t < Object.keys(shield).length; t++) {
       for(var e = 0; e < shield[Object.keys(shield)[t]].length;e++) {
+        document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>--" + Object.keys(shield)[t] + "." + shield[Object.keys(shield)[t]][e];
         loadShield(Object.keys(shield)[t],shield[Object.keys(shield)[t]][e]);
       }
     }
 
-        initInfo();
-        //initCodeView();
-        initSerial();
-        initCAN();
-        initI2S();
-        initI2C();
-        initSPI();
-        initPinsDigital();
-        initPinsAnalog();
-        initPinsPWM();
+    initInfo();
+    //initCodeView();
+    initSerial();
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-Serial";
+    initCAN();
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-CAN";
+    initI2S();
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-I2S";
+    initI2C();
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-I2C";
+    initSPI();
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-SPI";
+    initPinsDigital();
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-Digital";
+    initPinsAnalog();
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-Analog";
+    initPinsPWM();
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-PWM";
 
 
-        initBoardLayer(0);
-        initBoardLayer(1);
+    initBoardLayer(0);
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-Layer 0";
+    initBoardLayer(1);
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-Layer 1";
 
-        document.getElementById("boardView1").style.display = "none";
-        document.getElementById("boardView0").style.display = "table-cell";
-        document.getElementById("configurator").style.display = "table-cell";
+    document.getElementById("boardView1").style.display = "none";
+    document.getElementById("boardView0").style.display = "table-cell";
+    document.getElementById("configurator").style.display = "table-cell";
 
+    if (document.addEventListener) {
+      console.log("addEventListener");
+      document.addEventListener('mouseover', eListenerOver, false);
+      document.addEventListener('mouseout', eListenerOut, false);
+      document.addEventListener("change",eListenerChange,false);
+      document.addEventListener("click",eListenerClick,false);
+      window.addEventListener('resize', eListenerResize, true);
+    } else {
+      console.log("attachEvent");
+      document.attachEvent('onmouseover', eListenerOver);
+      document.attachEvent('onmouseout', eListenerOut);
+      document.attachEvent("onchange",eListenerChange);
+      document.attachEvent("onclick",eListenerClick);
+      window.attachEvent('onresize', eListenerResize);
+    }
 
+    window.setInterval(checkAll,200);
 
-        if (document.addEventListener) {
-          console.log("addEventListener");
-          document.addEventListener('mouseover', eListenerOver, false);
-          document.addEventListener('mouseout', eListenerOut, false);
-          document.addEventListener("change",eListenerChange,false);
-          document.addEventListener("click",eListenerClick,false);
-          window.addEventListener('resize', eListenerResize, true);
-        } else {
-          console.log("attachEvent");
-          document.attachEvent('onmouseover', eListenerOver);
-          document.attachEvent('onmouseout', eListenerOut);
-          document.attachEvent("onchange",eListenerChange);
-          document.attachEvent("onclick",eListenerClick);
-          window.attachEvent('onresize', eListenerResize);
-        }
+    showInfo();
 
-        window.setInterval(checkAll,200);
-
-        showInfo();
+    document.getElementById("loadscreen").style.display = "none";
 
   }).error(function() {
     console.log("error loading shields.json");
