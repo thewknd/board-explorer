@@ -91,10 +91,6 @@ function initPinsAnalog() {
   var tblPins = document.createElement("table");
   divHell1.appendChild(tblPins);
 
-  var groupBox = document.createElement("div");
-  groupBox.className = "gbPeripherals";
-  groupBox1.appendChild(groupBox);
-
   row = document.createElement("tr");
   tblPins.appendChild(row);
   cell = document.createElement("td");
@@ -107,6 +103,10 @@ function initPinsAnalog() {
   for(var o = 0; o < board.functions.analog.dac.pins.length; o++) {
     addCheckboxWithEdit(tblPins,"analogdac",board.functions.analog.dac.pins[o].pin_id,board.functions.analog.dac.pins[o].pin_name + " / " + board.functions.analog.dac.pins[o].alt_name,"",board.functions.analog.dac.pins[o].pin_id);
   }
+
+  var groupBox = document.createElement("div");
+  groupBox.className = "gbPeripherals";
+  groupBox1.appendChild(groupBox);
 
   var head4 = document.createElement("h4");
   head4.appendChild(document.createTextNode("Analog input (Analog to digital)"));

@@ -199,6 +199,8 @@ function initBoardLayer(layer){
 
 function createPowerPin(layer_svg, layer_conf, pin_label, anchor, x, y, pad_type, mod_pad_num = 0) {
 
+
+
   if(pad_type == 0) {
     var pin = layer_svg.append("circle");
     pin.attr("cy", y);
@@ -219,6 +221,35 @@ function createPowerPin(layer_svg, layer_conf, pin_label, anchor, x, y, pad_type
     pin.attr("stroke-width", layer_conf.pad_stroke_width);
     pin.attr("pin_id", pin_label);
   }
+
+  var line = layer_svg.append("line");
+  line.attr("y1", y);
+  if(anchor == "start") {
+    if(pad_type == 0) {
+      line.attr("x1", x + layer_conf.circle_r - layer_conf.circle_stroke_width+1);
+    } else if (pad_type == 1) {
+      line.attr("x1", x + layer_conf.pad_width-layer_conf.pad_stroke_width - layer_conf.pad_stroke_width+1);
+    }
+  } else {
+    if(pad_type == 0) {
+      line.attr("x1", x - layer_conf.circle_r + layer_conf.circle_stroke_width-1);
+    } else if (pad_type == 1) {
+      line.attr("x1", x - layer_conf.pad_stroke_width-1);
+    }
+  }
+
+  line.attr("stroke","black");
+  line.attr("stroke-width", 2.1);
+  if(anchor == "start") {
+    line.attr("y2",  y);
+    line.attr("x2", x + 40 + mod_pad_num);//line.attr("x2", x - layer_conf.space_dot_num + layer_conf.space_num_txt + layer_conf.num_width + layer_conf.circle_r + layer_conf.circle_stroke_width + layer_conf.rect_stroke_width + mod_pad_num);
+  } else {
+    line.attr("y2",  y);
+    line.attr("x2", x - 40 - mod_pad_num);//layer_conf.space_dot_num + layer_conf.space_num_txt + layer_conf.num_width + layer_conf.circle_r + layer_conf.circle_stroke_width + (3*layer_conf.rect_stroke_width) + mod_pad_num);
+  }
+  line.attr("id", "line" + pin_label);
+  line.attr("pin_id", pin_label);
+  line.attr("pin_arduino", pin_label);
 
   var pinNumBg = layer_svg.append("rect");
   pinNumBg.attr("y", y-(layer_conf.rect_height/2));
@@ -277,6 +308,38 @@ function createPin(layer_svg, layer_conf, num, anchor, x, y, pad_type, mod_pad_n
     pin.attr("pin_arduino", num);
   }
 
+  var line = layer_svg.append("line");
+  line.attr("y1", y);
+  if(anchor == "start") {
+    if(pad_type == 0) {
+      line.attr("x1", x + layer_conf.circle_r - layer_conf.circle_stroke_width+1);
+    } else if (pad_type == 1) {
+      line.attr("x1", x + layer_conf.pad_width-layer_conf.pad_stroke_width - layer_conf.pad_stroke_width+1);
+    }
+  } else {
+    if(pad_type == 0) {
+      line.attr("x1", x - layer_conf.circle_r + layer_conf.circle_stroke_width-1);
+    } else if (pad_type == 1) {
+      line.attr("x1", x - layer_conf.pad_stroke_width-1);
+    }
+  }
+
+  line.attr("stroke","black");
+  line.attr("stroke-width", 2.1);
+  if(anchor == "start") {
+    line.attr("y2",  y);
+    line.attr("x2", x + layer_conf.space_dot_num + layer_conf.space_num_txt + layer_conf.num_width + layer_conf.circle_r + layer_conf.circle_stroke_width + layer_conf.rect_stroke_width + mod_pad_num);//line.attr("x2", x - layer_conf.space_dot_num + layer_conf.space_num_txt + layer_conf.num_width + layer_conf.circle_r + layer_conf.circle_stroke_width + layer_conf.rect_stroke_width + mod_pad_num);
+  } else {
+    line.attr("y2",  y);
+    line.attr("x2", x - 100);//layer_conf.space_dot_num + layer_conf.space_num_txt + layer_conf.num_width + layer_conf.circle_r + layer_conf.circle_stroke_width + (3*layer_conf.rect_stroke_width) + mod_pad_num);
+  }
+  line.attr("id", "line" + num);
+  line.attr("pin_id", num);
+  line.attr("pin_arduino", num);
+
+  /*line.attr("stroke","black");
+  line.attr("stroke-width", layer_conf.pad_stroke_width);*/
+
   var pinNumBg = layer_svg.append("rect");
   pinNumBg.attr("y", y-(layer_conf.rect_height/2));
   if(anchor == "start") {
@@ -314,7 +377,7 @@ function createPin(layer_svg, layer_conf, num, anchor, x, y, pad_type, mod_pad_n
   if(anchor == "start") {
     pinTxtBg.attr("x", x + layer_conf.space_dot_num + layer_conf.space_num_txt + layer_conf.num_width + layer_conf.circle_r + layer_conf.circle_stroke_width + layer_conf.rect_stroke_width + mod_pad_num);
   } else {
-      pinTxtBg.attr("x", x - layer_conf.space_dot_num - layer_conf.space_num_txt - layer_conf.num_width - layer_conf.txt_width - layer_conf.circle_r - layer_conf.circle_stroke_width - layer_conf.rect_stroke_width - mod_pad_num);
+    pinTxtBg.attr("x", x - layer_conf.space_dot_num - layer_conf.space_num_txt - layer_conf.num_width - layer_conf.txt_width - layer_conf.circle_r - layer_conf.circle_stroke_width - layer_conf.rect_stroke_width - mod_pad_num);
   }
   pinTxtBg.attr("height", layer_conf.rect_height);
   pinTxtBg.attr("width", layer_conf.txt_width);

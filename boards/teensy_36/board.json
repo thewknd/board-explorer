@@ -103,6 +103,9 @@
         "frequency-default": 488.28
       }
     },
+    "touch": {
+      "pins": [0,1,15,16,17,18,19,22,23,29,30]
+    },
     "Serial": [
       {
         "function-name": "Serial1",

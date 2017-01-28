@@ -348,6 +348,8 @@ function hideAllConfigurations() {
     hideSPI();
     hidePinsDigital();
     hidePinsPWM();
+    hideTouch();
+    hideCode();
     hidePinsAnalog();
 
     if((shield !== null) && (shield != "undefinied")) {

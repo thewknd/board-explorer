@@ -51,7 +51,11 @@ function loadAllShields() {
     document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-Analog";
     initPinsPWM();
     document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-PWM";
+    initTouch();
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-Touch";
 
+    initCode();
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-CodeViewer";
 
     initBoardLayer(0);
     document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-Layer 0";
@@ -62,6 +66,7 @@ function loadAllShields() {
     document.getElementById("boardView0").style.display = "table-cell";
     document.getElementById("configurator").style.display = "table-cell";
 
+    document.getElementById("divlog").innerHTML = document.getElementById("divlog").innerHTML + "<br/>-Add EventListener";
     if (document.addEventListener) {
       console.log("addEventListener");
       document.addEventListener('mouseover', eListenerOver, false);

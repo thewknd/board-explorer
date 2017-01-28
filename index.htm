@@ -19,6 +19,7 @@
     <script src="./js/pins_analog.js"></script>
     <script src="./js/pins_pwm.js"></script>
     <script src="./js/codeview.js"></script>
+    <script src="./js/touch.js"></script>
 
     <script src="./boards/teensy_36/board.js"></script>
 
@@ -87,7 +88,7 @@
       <div id="divlog">
       </div>
     </div>
-  </body>
+
   <script>
 var board;
 var shield;
@@ -169,6 +170,7 @@ function highlightPin(pin_nr) {
     d3.select("#pinNumBg" + pin_nr).attr("stroke-width", "2");
     d3.select("#pinTxtBg" + pin_nr).attr("stroke", "#FF6666");
     d3.select("#pinTxtBg" + pin_nr).attr("stroke-width", "2");
+    d3.select("#line" + pin_nr).attr("stroke", "#FF6666");
     //d3.select("#pin" + pin_nr).attr("stroke", "red");
     d3.select("#pin" + pin_nr).attr("fill", "#FF6666");
 }
@@ -178,6 +180,7 @@ function shutOffPin(pin_nr) {
     d3.select("#pinNumBg" + pin_nr).attr("stroke-width", "1");
     d3.select("#pinTxtBg" +pin_nr).attr("stroke", "black");
     d3.select("#pinTxtBg" +pin_nr).attr("stroke-width", "1");
+    d3.select("#line" + pin_nr).attr("stroke", "black");
     //d3.select("#pin" +pin_nr).attr("stroke", "black");
     d3.select("#pin" +pin_nr).attr("fill", "white");
 }
@@ -189,14 +192,6 @@ function checkAll() {
     d3.select("#pinTxtBg" + board.pins[i].pin_id).attr("fill", "#FFF");
     shutOffPin(board.pins[i].pin_id);
     shutOffCompatiblePin(board.pins[i].pin_id);
-  }
-
-  if(hl_select != -1) {
-    highlightPin(hl_select);
-  }
-
-  for(var p = 0; p < hl_pin_num_bg.length; p++) {
-    highlightCompatiblePin(hl_pin_num_bg[p]);
   }
 
   for(var p = 0; p < board.pins.length; p++) {
@@ -227,6 +222,15 @@ function checkAll() {
         checkPin(board.functions.pwm.pins[p], document.getElementById("iPWM" + board.functions.pwm.pins[p]).value);
       } else {
         checkPin(board.functions.pwm.pins[p], "PWM output");
+      }
+    }
+  }
+  for(var p = 0; p < board.functions.touch.pins.length; p++) {
+    if(document.getElementById("cbxEnableTOUCH" + board.functions.touch.pins[p]).checked) {
+      if(document.getElementById("iTOUCH" + board.functions.touch.pins[p]).value !== "") {
+        checkPin(board.functions.touch.pins[p], document.getElementById("iTOUCH" + board.functions.touch.pins[p]).value);
+      } else {
+        checkPin(board.functions.touch.pins[p], "Touch");
       }
     }
   }
@@ -351,6 +355,14 @@ function checkAll() {
       checkShield(Object.keys(shield)[h],shield[Object.keys(shield)[h]][l]);
     }
   }
+
+  if(hl_select != -1) {
+    highlightPin(hl_select);
+  }
+
+  for(var p = 0; p < hl_pin_num_bg.length; p++) {
+    highlightCompatiblePin(hl_pin_num_bg[p]);
+  }
 }
 
 function checkShield(shield_vendor,shield_object) {
@@ -376,9 +388,11 @@ function checkPin(pin,txt) {
   if(d3.select("#pinTxt" + pin).text() == "disabled") {
     d3.select("#pinTxt" + pin).text(txt);
     d3.select("#pinTxtBg" + pin).attr("fill", "#A9E28D");
+    d3.select("#pin" + pin).attr("fill", "#A9E28D");
   } else {
     d3.select("#pinTxt" + pin).text("E: Pin bereits verwendet");
     d3.select("#pinTxtBg" + pin).attr("fill", "#ffc107");
+    d3.select("#pin" + pin).attr("fill", "#ffc107");
   }
 }
 
@@ -411,5 +425,6 @@ $(document).ready(function () {
     console.log("board boards/boards.json loaded");
   });
 });
-  </script>
+    </script>
+  </body>
 </html>

@@ -32,7 +32,7 @@ function loadmenu() {
   topmenu.className = "topmenu";
   document.getElementById("mainmenu").appendChild(topmenu);
   addMenuItem(topmenu,"showInfo()","Information");
-  //addMenuItem(topmenu,"showCodeView()","Code");
+  addMenuItem(topmenu,"showCodeView()","Code");
 
   var menutitle = document.createElement("h3");
   txtnode = document.createTextNode("I/O Pins");
@@ -44,6 +44,7 @@ function loadmenu() {
   addMenuItem(topmenu,"showPinsDigital()","Digital");
   addMenuItem(topmenu,"showPinsAnalog()","Analog");
   addMenuItem(topmenu,"showPinsPWM()","PWM");
+  addMenuItem(topmenu,"showTouch()","Touch");
 
 
 
